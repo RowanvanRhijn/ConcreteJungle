@@ -1,0 +1,9 @@
+{
+  "mapFile" : "TileMaps/Level1.tmx",
+  "nStartX" : 1856,
+  "nStartY" : 176,
+  "nFinishX" : -30,
+  "nFinishY" : 1344,
+  "nPrevTime" : 0,
+  "nEnemies" : 0
+}
