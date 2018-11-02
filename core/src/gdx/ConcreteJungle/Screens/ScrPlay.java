@@ -128,11 +128,6 @@ public class ScrPlay implements Screen {
                 orthCam.position.set(orthCam.position.x, orthCam.viewportHeight / 2, orthCam.position.z);
             }
         }
-        if (isFinished(sprUser, sprFinish)) {
-            nDirection = 0;
-            nHitDirection = 0;
-            concreteJungle.updateState(2);
-        }
 
         //For debugging:
         if (Gdx.input.isKeyPressed(Input.Keys.S)) nDirection = 0;
@@ -146,6 +141,12 @@ public class ScrPlay implements Screen {
         if (currentTimeMillis() - lTimeStart > 5000 && hasZoomed == false){
             orthCam.setToOrtho(false,Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() /2);
             hasZoomed = true;
+        }
+        if (isFinished(sprUser, sprFinish)) {
+            nDirection = 0;
+            nHitDirection = 0;
+            hasZoomed = false;
+            concreteJungle.updateState(2);
         }
     }
 
@@ -201,8 +202,7 @@ public class ScrPlay implements Screen {
 
     @Override
     public void dispose () {
-        batch.dispose();
-        txUser.dispose();
+
     }
 
     @Override
