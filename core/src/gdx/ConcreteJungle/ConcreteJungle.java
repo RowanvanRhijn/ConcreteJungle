@@ -4,15 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.Json;
 import gdx.ConcreteJungle.Screens.*;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ConcreteJungle extends Game {
 	ScrTitle scrTitle;
 	ScrPlay scrPlay;
 	ScrVictory scrVictory;
-	//put screens here
+
 	int nScreen, nLatest;
 	Level arLevel[] = new Level[15];
 	Json json = new Json();

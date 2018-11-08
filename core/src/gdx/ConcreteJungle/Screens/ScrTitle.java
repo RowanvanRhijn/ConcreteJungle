@@ -1,17 +1,12 @@
 package gdx.ConcreteJungle.Screens;
 
-import java.util.*;
-import java.io.*;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import gdx.ConcreteJungle.ConcreteJungle;
-import gdx.ConcreteJungle.Level;
-
 
 
 public class ScrTitle implements Screen {
@@ -36,13 +31,13 @@ public class ScrTitle implements Screen {
 	public void render (float delta) {
 		Gdx.gl.glClearColor(0, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		//Background drawn
-		batch.draw(txTitle, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		//Sprites drawn
-		sprStart.draw(batch);
-		//Buttons checked
+
 		if(isClicked(sprStart)) concreteJungle.updateState(1);
+
+		batch.begin();
+
+		batch.draw(txTitle, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		sprStart.draw(batch);
 
 		batch.end();
 	}

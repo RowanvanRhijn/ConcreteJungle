@@ -1,14 +1,12 @@
 package gdx.ConcreteJungle.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import gdx.ConcreteJungle.ConcreteJungle;
-//import javafx.scene.input.MouseButton;
 
 
 public class ScrVictory implements Screen {
@@ -57,8 +55,7 @@ public class ScrVictory implements Screen {
 
     @Override
     public void dispose () {
-        batch.dispose();
-        txTitle.dispose();
+
     }
 
     @Override
