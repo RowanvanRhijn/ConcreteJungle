@@ -7,32 +7,38 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import gdx.ConcreteJungle.ConcreteJungle;
 import gdx.ConcreteJungle.Level;
+import gdx.ConcreteJungle.SprFinish;
+import gdx.ConcreteJungle.SprUser;
+
 import static java.lang.System.currentTimeMillis;
 
 public class ScrPlay implements Screen {
     ConcreteJungle concreteJungle;
     SpriteBatch batch;
-    Texture txUser, txFinish;
-    Sprite sprUser, sprFinish;
+    String strUserTx, strFinishTx;
+    //Sprite sprUser, sprFinish;
+    SprUser sprUser;
+    SprFinish sprFinish;
 
+    //Sprite movement stuff
     int nDirection = 0;
     int nDX[] = new int[5];
     int nDY[] = new int[5];
+
+    //Zooming stuff
     long lTimeStart;
     boolean hasZoomed = false;
 
+    //Map dimensions
     MapProperties mapProperties;
     int nMapWidth;
     int nMapHeight;
@@ -41,10 +47,12 @@ public class ScrPlay implements Screen {
     int nMapTotalWidth;
     int nMapTotalHeight;
 
+    //Objects for collisions
     int nObjectLayerId;
     MapLayer mapCollisionObjectLayer;
     MapObjects mapObjects;
 
+    //Tiled + camera
     private OrthographicCamera orthCam;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
@@ -57,12 +65,13 @@ public class ScrPlay implements Screen {
     public void show() {
         Level currentLevel = concreteJungle.getLevel();
         batch = new SpriteBatch();
-        txUser = new Texture ("MainCharacter.png");
-        txFinish = new Texture ("FinishPoint.png");
-        sprUser = new Sprite (txUser);
+
+        strUserTx = "MainCharacter.png";
+        strFinishTx = "FinishPoint.png";
+        sprUser = new SprUser(new Texture(strUserTx));
         sprUser.setSize(32, 32);
         sprUser.setPosition(currentLevel.getStartX(), currentLevel.getStartY());
-        sprFinish = new Sprite (txFinish);
+        sprFinish = new SprFinish(new Texture(strFinishTx));
         sprFinish.setSize(32, 256);
         sprFinish.setPosition(currentLevel.getFinishX(), currentLevel.getFinishY());
 
@@ -110,17 +119,13 @@ public class ScrPlay implements Screen {
         //Once-a-frame checks and operations
         if(hasZoomed) moveUser();
 
-        if (isBuildingHit(sprUser)) {
-            if (nDirection == 1) sprUser.translateX(3);
-            if (nDirection == 2) sprUser.translateX(-3);
-            if (nDirection == 3) sprUser.translateY(-3);
-            if (nDirection == 4) sprUser.translateY(3);
+        if (sprUser.isBuildingHit(map)) {
+            sprUser.translate(-1*(nDX[nDirection]), -1*(nDY[nDirection]));
             nDirection = 0;
         }
 
         if (hasZoomed) {
             orthCam.position.set(sprUser.getX() + sprUser.getWidth() / 2, sprUser.getY() + sprUser.getHeight() / 2, 0);
-
             //Some values here look weird because the camera is moving based on its centrepoint
             if (orthCam.position.x > nMapTotalWidth - orthCam.viewportWidth / 2){
                 orthCam.position.set(nMapTotalWidth - orthCam.viewportWidth / 2, orthCam.position.y, orthCam.position.z);
@@ -128,7 +133,6 @@ public class ScrPlay implements Screen {
             if (orthCam.position.x < orthCam.viewportWidth / 2){
                 orthCam.position.set(orthCam.viewportWidth / 2, orthCam.position.y, orthCam.position.z);
             }
-
             if (orthCam.position.y > nMapTotalHeight - orthCam.viewportHeight / 2){
                 orthCam.position.set(orthCam.position.x, nMapTotalHeight - orthCam.viewportHeight / 2, orthCam.position.z);
             }
@@ -150,43 +154,21 @@ public class ScrPlay implements Screen {
             orthCam.setToOrtho(false,Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() /2);
             hasZoomed = true;
         }
-        if (isFinished(sprUser, sprFinish) || Gdx.input.isKeyPressed(Input.Keys.N)) {
+
+        if (sprUser.isFinished(sprFinish) || Gdx.input.isKeyPressed(Input.Keys.N)) {
             nDirection = 0;
             hasZoomed = false;
             concreteJungle.updateState(2);
         }
     }
 
-
-    public static boolean isFinished (Sprite spr1, Sprite spr2){
-        return spr1.getBoundingRectangle().overlaps(spr2.getBoundingRectangle());
-    }
-
-    public boolean isBuildingHit(Sprite spr1){
-        //Stolen from https://stackoverflow.com/questions/20063281/libgdx-collision-detection-with-tiledmap
-        nObjectLayerId = 2;
-        //Was TiledMapTileLayer and trying to cast a MapLayer to it, can't do that but works just as MapLayers
-        mapCollisionObjectLayer = map.getLayers().get(nObjectLayerId);
-        mapObjects = mapCollisionObjectLayer.getObjects();
-
-        //there are several other types, Rectangle is probably the most common one
-        for (RectangleMapObject rectangleObject : mapObjects.getByType(RectangleMapObject.class)) {
-            //System.out.println("Run once");
-            Rectangle rectangle = rectangleObject.getRectangle();
-            if (spr1.getBoundingRectangle().overlaps(rectangle)){
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void moveUser(){
+        //Done here and not in the sprite because of the listeners
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) nDirection = 1;
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) nDirection = 2;
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) nDirection = 3;
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) nDirection = 4;
-        sprUser.translateX(nDX[nDirection]);
-        sprUser.translateY(nDY[nDirection]);
+        sprUser.translate(nDX[nDirection], nDY[nDirection]);
     }
 
     @Override
