@@ -1,4 +1,3 @@
-
 package gdx.ConcreteJungle.Screens;
 
 import com.badlogic.gdx.Gdx;
@@ -8,16 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import gdx.ConcreteJungle.ConcreteJungle;
-import gdx.ConcreteJungle.Level;
-import gdx.ConcreteJungle.SprFinish;
-import gdx.ConcreteJungle.SprUser;
+import gdx.ConcreteJungle.*;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -26,17 +20,19 @@ public class ScrPlay implements Screen {
     SpriteBatch batch;
     String strUserTx, strFinishTx;
     //Sprite sprUser, sprFinish;
-    SprUser sprUser;
+    public static SprUser sprUser;
     SprFinish sprFinish;
 
+    InputListener inputListener;
+
     //Sprite movement stuff
-    int nDirection = 0;
+    int nDirection;
     int nDX[] = new int[5];
     int nDY[] = new int[5];
 
     //Zooming stuff
     long lTimeStart;
-    boolean hasZoomed = false;
+    boolean hasZoomed;
 
     //Map dimensions
     MapProperties mapProperties;
@@ -46,11 +42,6 @@ public class ScrPlay implements Screen {
     int nTilePixelHeight;
     int nMapTotalWidth;
     int nMapTotalHeight;
-
-    //Objects for collisions
-    int nObjectLayerId;
-    MapLayer mapCollisionObjectLayer;
-    MapObjects mapObjects;
 
     //Tiled + camera
     private OrthographicCamera orthCam;
@@ -65,6 +56,9 @@ public class ScrPlay implements Screen {
     public void show() {
         Level currentLevel = concreteJungle.getLevel();
         batch = new SpriteBatch();
+
+        nDirection = 0;
+        hasZoomed = false;
 
         strUserTx = "MainCharacter.png";
         strFinishTx = "FinishPoint.png";
@@ -104,6 +98,9 @@ public class ScrPlay implements Screen {
         nDY[2] = 0;
         nDY[3] = 3;
         nDY[4] = -3;
+
+        inputListener = new InputListener();
+        Gdx.input.setInputProcessor(inputListener);
     }
 
     @Override
@@ -117,12 +114,9 @@ public class ScrPlay implements Screen {
         batch.setProjectionMatrix(orthCam.combined);
 
         //Once-a-frame checks and operations
-        if(hasZoomed) moveUser();
+        if(hasZoomed) sprUser.moveUser(1);
 
-        if (sprUser.isBuildingHit(map)) {
-            sprUser.translate(-1*(nDX[nDirection]), -1*(nDY[nDirection]));
-            nDirection = 0;
-        }
+        if (sprUser.isBuildingHit(map)) sprUser.moveUser(-1);
 
         if (hasZoomed) {
             orthCam.position.set(sprUser.getX() + sprUser.getWidth() / 2, sprUser.getY() + sprUser.getHeight() / 2, 0);
@@ -141,9 +135,6 @@ public class ScrPlay implements Screen {
             }
         }
 
-        //For debugging:
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) nDirection = 0;
-
         batch.begin();
         sprUser.draw(batch);
         sprFinish.draw(batch);
@@ -153,22 +144,12 @@ public class ScrPlay implements Screen {
         if (currentTimeMillis() - lTimeStart > 5000 && hasZoomed == false){
             orthCam.setToOrtho(false,Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() /2);
             hasZoomed = true;
+            sprUser.setDirection(0);
         }
 
-        if (sprUser.isFinished(sprFinish) || Gdx.input.isKeyPressed(Input.Keys.N)) {
-            nDirection = 0;
-            hasZoomed = false;
-            concreteJungle.updateState(2);
-        }
-    }
-
-    public void moveUser(){
-        //Done here and not in the sprite because of the listeners
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) nDirection = 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) nDirection = 2;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) nDirection = 3;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) nDirection = 4;
-        sprUser.translate(nDX[nDirection], nDY[nDirection]);
+        //This is the only part that still uses the LibGdx input processing,
+        //As updateState cannot be called from the inputListener
+        if (sprUser.isFinished(sprFinish) || Gdx.input.isKeyPressed(Input.Keys.N)) concreteJungle.updateState(2);
     }
 
     @Override

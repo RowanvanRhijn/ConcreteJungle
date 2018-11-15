@@ -1,5 +1,7 @@
 package gdx.ConcreteJungle;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
@@ -9,13 +11,38 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 
 public class SprUser extends Sprite {
-    //This has like nothing in it except hit detection
+    int nDirection = 0;
+
+    int nDX[] = new int[5];
+    int nDY[] = new int[5];
+
     int nObjectLayerId;
     MapLayer mapCollisionObjectLayer;
     MapObjects mapObjects;
 
     public SprUser(Texture txImg) {
         super(txImg);
+        nDX[0] = 0;
+        nDX[1] = -3;
+        nDX[2] = 3;
+        nDX[3] = 0;
+        nDX[4] = 0;
+        nDY[0] = 0;
+        nDY[1] = 0;
+        nDY[2] = 0;
+        nDY[3] = 3;
+        nDY[4] = -3;
+        System.out.println ("Arrays set");
+    }
+
+    public void setDirection(int _nDirection){
+        System.out.println ("Direction received");
+        nDirection = _nDirection;
+    }
+
+    public void moveUser(int nMod){
+//        System.out.println ("moveUser called");
+        translate(nMod * nDX[nDirection], nMod * nDY[nDirection]);
     }
 
     public boolean isFinished (Sprite sprTest){
