@@ -32,11 +32,11 @@ public class SprUser extends Sprite {
         nDY[2] = 0;
         nDY[3] = 3;
         nDY[4] = -3;
-        System.out.println ("Arrays set");
+//        System.out.println ("Arrays set");
     }
 
     public void setDirection(int _nDirection){
-        System.out.println ("Direction received");
+//        System.out.println ("Direction received");
         nDirection = _nDirection;
     }
 

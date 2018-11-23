@@ -4,16 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import gdx.ConcreteJungle.ConcreteJungle;
+import gdx.ConcreteJungle.SprRectangle;
 
 
 public class ScrVictory implements Screen {
     ConcreteJungle concreteJungle;
     SpriteBatch batch;
     Texture txTitle, txNext;
-    Sprite sprNext;
+    SprRectangle sprNext;
 
     public ScrVictory(ConcreteJungle _ConcreteJungle) {  //Referencing the main class.
         concreteJungle = _ConcreteJungle;
@@ -24,7 +24,7 @@ public class ScrVictory implements Screen {
         batch = new SpriteBatch();
         txTitle = new Texture ("TitleScreen.jpg");
         txNext = new Texture ("Next.png");
-        sprNext = new Sprite (txNext);
+        sprNext = new SprRectangle(txNext);
         sprNext.setPosition(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 100);
         sprNext.setSize(300, 200);
     }
@@ -45,7 +45,7 @@ public class ScrVictory implements Screen {
         batch.end();
     }
 
-    public boolean isClicked(Sprite sprCheck){
+    public boolean isClicked(SprRectangle sprCheck){
         if(Gdx.input.justTouched() && Gdx.input.getX() >= sprCheck.getX() && Gdx.input.getX() <= sprCheck.getX() + sprCheck.getWidth()
                 && Gdx.input.getY() >= sprCheck.getY() && Gdx.input.getY() <= sprCheck.getY() + sprCheck.getHeight()){
             return true;

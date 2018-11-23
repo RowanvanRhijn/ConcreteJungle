@@ -7,24 +7,24 @@ import gdx.ConcreteJungle.Screens.*;
 public class InputListener implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
-        System.out.println ("Called");
+//        System.out.println ("Called");
         switch (keycode)
         {
             case Input.Keys.LEFT:
                 ScrPlay.sprUser.setDirection(1);
-                System.out.println ("1 set");
+//                System.out.println ("1 set");
                 break;
             case Input.Keys.RIGHT:
                 ScrPlay.sprUser.setDirection(2);
-                System.out.println ("2 set");
+//                System.out.println ("2 set");
                 break;
             case Input.Keys.UP:
                 ScrPlay.sprUser.setDirection(3);
-                System.out.println ("3 set");
+//                System.out.println ("3 set");
                 break;
             case Input.Keys.DOWN:
                 ScrPlay.sprUser.setDirection(4);
-                System.out.println ("4 set");
+//                System.out.println ("4 set");
                 break;
             case Input.Keys.S:
                 ScrPlay.sprUser.setDirection(0);
