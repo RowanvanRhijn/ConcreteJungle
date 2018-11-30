@@ -128,7 +128,7 @@ public class ScrPlay implements Screen, InputProcessor {
             hasZoomed = true;
             sprUser.setDirection(0);
         }
-        
+
         batch.begin();
 
         sprUser.draw(batch);
@@ -200,6 +200,10 @@ public class ScrPlay implements Screen, InputProcessor {
         }
         if (keycode == Input.Keys.DOWN){
             sprUser.setDirection(4);
+        }
+        if (keycode == Input.Keys.N){
+            //Cheat code for Grondin mode
+            concreteJungle.updateState(2);
         }
         return true;
     }
