@@ -23,7 +23,7 @@ public class ScrPlay implements Screen, InputProcessor {
     String strUserTx, strFinishTx;
     //Sprite sprUser, sprFinish;
     SprUser sprUser;
-    SprFinish sprFinish;
+    SprRectangle sprFinish;
 
     //Sprite movement stuff
     int nDirection;
@@ -68,7 +68,7 @@ public class ScrPlay implements Screen, InputProcessor {
         sprUser = new SprUser(new Texture(strUserTx));
         sprUser.setSize(32, 32);
         sprUser.setPosition(currentLevel.getStartX(), currentLevel.getStartY());
-        sprFinish = new SprFinish(new Texture(strFinishTx));
+        sprFinish = new SprRectangle(new Texture(strFinishTx));
         sprFinish.setSize(32, 256);
         sprFinish.setPosition(currentLevel.getFinishX(), currentLevel.getFinishY());
 
@@ -96,7 +96,7 @@ public class ScrPlay implements Screen, InputProcessor {
         orthCam.update();
 
         lTimeStart = currentTimeMillis();
-        lTimeLimit = 15000;
+        lTimeLimit = 50000;
 
         nDX[0] = 0;
         nDX[1] = -3;
@@ -122,10 +122,17 @@ public class ScrPlay implements Screen, InputProcessor {
         orthCam.update();
         batch.setProjectionMatrix(orthCam.combined);
 
-        //Once-a-frame checks and operations
-        if(hasZoomed) sprUser.moveUser(1);
+        //Learned some of this from https://www.baeldung.com/java-measure-elapsed-time
+        if (currentTimeMillis() - lTimeStart > 5000 && hasZoomed == false){
+            orthCam.setToOrtho(false,Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() /2);
+            hasZoomed = true;
+            sprUser.setDirection(0);
+        }
+        
+        batch.begin();
 
-        if (sprUser.isBuildingHit(map)) sprUser.moveUser(-1);
+        sprUser.draw(batch);
+        sprFinish.draw(batch);
 
         if (hasZoomed) {
             orthCam.position.set(sprUser.getX() + sprUser.getWidth() / 2, sprUser.getY() + sprUser.getHeight() / 2, 0);
@@ -142,23 +149,17 @@ public class ScrPlay implements Screen, InputProcessor {
             if (orthCam.position.y < orthCam.viewportHeight / 2){
                 orthCam.position.set(orthCam.position.x, orthCam.viewportHeight / 2, orthCam.position.z);
             }
+
+            if(hasZoomed) sprUser.moveUser(1);
+            if (sprUser.isBuildingHit(map)) sprUser.moveUser(-1);
+            if (currentTimeMillis() - lTimeStart > lTimeLimit || sprUser.isFinished(sprFinish)){
+                concreteJungle.updateState(2);
+            }
+
+            font.draw(batch, String.valueOf((float) (lTimeLimit - (System.currentTimeMillis() - lTimeStart)) / 1000), orthCam.position.x + 110, orthCam.position.y + 110);
         }
 
-        batch.begin();
-        sprUser.draw(batch);
-        sprFinish.draw(batch);
-        if (hasZoomed == true) font.draw(batch, String.valueOf((float) (lTimeLimit - (System.currentTimeMillis() - lTimeStart)) / 1000), orthCam.position.x + 110, orthCam.position.y + 110);
         batch.end();
-
-        //Learned some of this from https://www.baeldung.com/java-measure-elapsed-time
-        if (currentTimeMillis() - lTimeStart > 5000 && hasZoomed == false){
-            orthCam.setToOrtho(false,Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() /2);
-            hasZoomed = true;
-            sprUser.setDirection(0);
-        }
-        if (currentTimeMillis() - lTimeStart > lTimeLimit){
-            concreteJungle.updateState(2);
-        }
     }
 
     @Override
