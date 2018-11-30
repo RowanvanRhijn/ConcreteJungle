@@ -23,15 +23,15 @@ public class ScrTitle implements Screen {
 		txTitle = new Texture ("TitleScreen.jpg");
 		txStart = new Texture ("Start.png");
 		sprStart = new Sprite(txStart);
-		sprStart.setPosition(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 50);
 		sprStart.setSize(300, 100);
+		sprStart.setPosition((Gdx.graphics.getWidth() / 2) - (sprStart.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (sprStart.getHeight() / 2));
 	}
 
 	@Override
 	public void render (float delta) {
 		Gdx.gl.glClearColor(0, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+		
 		if(isClicked(sprStart)) concreteJungle.updateState(1);
 
 		batch.begin();

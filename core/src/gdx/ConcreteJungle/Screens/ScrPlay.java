@@ -2,6 +2,7 @@ package gdx.ConcreteJungle.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,15 +16,13 @@ import gdx.ConcreteJungle.*;
 
 import static java.lang.System.currentTimeMillis;
 
-public class ScrPlay implements Screen {
+public class ScrPlay implements Screen, InputProcessor {
     ConcreteJungle concreteJungle;
     SpriteBatch batch;
     String strUserTx, strFinishTx;
     //Sprite sprUser, sprFinish;
-    public static SprUser sprUser;
+    SprUser sprUser;
     SprFinish sprFinish;
-
-    InputListener inputListener;
 
     //Sprite movement stuff
     int nDirection;
@@ -84,6 +83,11 @@ public class ScrPlay implements Screen {
         nMapTotalHeight = nMapHeight * nTilePixelHeight;
 
         orthCam = new OrthographicCamera(nMapTotalWidth, nMapTotalHeight);
+        orthCam.setToOrtho(false, nMapTotalWidth, Gdx.graphics.getHeight() * (nMapTotalWidth / Gdx.graphics.getWidth()));
+        if (Gdx.graphics.getHeight() * (nMapTotalWidth / Gdx.graphics.getWidth()) <  nMapTotalHeight){
+            orthCam.setToOrtho(false, Gdx.graphics.getWidth() * (nMapTotalHeight / Gdx.graphics.getHeight()), nMapTotalHeight);
+        }
+
         orthCam.position.set(nMapTotalWidth / 2, nMapTotalHeight / 2, 0);
         orthCam.update();
         lTimeStart = currentTimeMillis();
@@ -99,13 +103,12 @@ public class ScrPlay implements Screen {
         nDY[3] = 3;
         nDY[4] = -3;
 
-        inputListener = new InputListener();
-        Gdx.input.setInputProcessor(inputListener);
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(0, 0, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.setView(orthCam);
@@ -175,5 +178,57 @@ public class ScrPlay implements Screen {
     @Override
     public void hide() {
 
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.LEFT){
+            sprUser.setDirection(1);
+        }
+        if (keycode == Input.Keys.RIGHT){
+            sprUser.setDirection(2);
+        }
+        if (keycode == Input.Keys.UP){
+            sprUser.setDirection(3);
+        }
+        if (keycode == Input.Keys.DOWN){
+            sprUser.setDirection(4);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
