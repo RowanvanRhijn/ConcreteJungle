@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -31,6 +32,9 @@ public class ScrPlay implements Screen, InputProcessor {
 
     //Zooming stuff
     long lTimeStart;
+    long lTimeLimit;
+    BitmapFont font = new BitmapFont();
+
     boolean hasZoomed;
 
     //Map dimensions
@@ -90,7 +94,9 @@ public class ScrPlay implements Screen, InputProcessor {
 
         orthCam.position.set(nMapTotalWidth / 2, nMapTotalHeight / 2, 0);
         orthCam.update();
+
         lTimeStart = currentTimeMillis();
+        lTimeLimit = 15000;
 
         nDX[0] = 0;
         nDX[1] = -3;
@@ -108,7 +114,7 @@ public class ScrPlay implements Screen, InputProcessor {
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.setView(orthCam);
@@ -141,6 +147,7 @@ public class ScrPlay implements Screen, InputProcessor {
         batch.begin();
         sprUser.draw(batch);
         sprFinish.draw(batch);
+        if (hasZoomed == true) font.draw(batch, String.valueOf((float) (lTimeLimit - (System.currentTimeMillis() - lTimeStart)) / 1000), orthCam.position.x + 110, orthCam.position.y + 110);
         batch.end();
 
         //Learned some of this from https://www.baeldung.com/java-measure-elapsed-time
@@ -149,10 +156,9 @@ public class ScrPlay implements Screen, InputProcessor {
             hasZoomed = true;
             sprUser.setDirection(0);
         }
-
-        //This is the only part that still uses the LibGdx input processing,
-        //As updateState cannot be called from the inputListener
-        if (sprUser.isFinished(sprFinish) || Gdx.input.isKeyPressed(Input.Keys.N)) concreteJungle.updateState(2);
+        if (currentTimeMillis() - lTimeStart > lTimeLimit){
+            concreteJungle.updateState(2);
+        }
     }
 
     @Override
