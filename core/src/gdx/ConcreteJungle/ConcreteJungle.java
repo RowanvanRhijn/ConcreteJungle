@@ -8,7 +8,7 @@ import com.badlogic.gdx.Gdx;
 public class ConcreteJungle extends Game {
 	ScrTitle scrTitle;
 	ScrPlay scrPlay;
-	ScrVictory scrVictory;
+	ScrEnd scrVictory;
 
 	int nScreen, nLatest;
 	Level arLevel[] = new Level[15];
@@ -44,7 +44,7 @@ public class ConcreteJungle extends Game {
 		nScreen = 0;
 		scrTitle = new ScrTitle(this);
 		scrPlay = new ScrPlay(this);
-		scrVictory = new ScrVictory(this);
+		scrVictory = new ScrEnd(this);
 		//Put screens here like this too
 		updateState(nScreen);
 

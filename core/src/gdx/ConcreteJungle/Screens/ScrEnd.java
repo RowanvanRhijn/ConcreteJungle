@@ -9,13 +9,13 @@ import gdx.ConcreteJungle.ConcreteJungle;
 import gdx.ConcreteJungle.SprRectangle;
 
 
-public class ScrVictory implements Screen {
+public class ScrEnd implements Screen {
     ConcreteJungle concreteJungle;
     SpriteBatch batch;
     Texture txTitle, txNext;
     SprRectangle sprNext;
 
-    public ScrVictory(ConcreteJungle _ConcreteJungle) {  //Referencing the main class.
+    public ScrEnd(ConcreteJungle _ConcreteJungle) {  //Referencing the main class.
         concreteJungle = _ConcreteJungle;
     }
 
