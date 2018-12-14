@@ -9,21 +9,11 @@ public class ConcreteJungle extends Game {
 	ScrTitle scrTitle;
 	ScrPlay scrPlay;
 	ScrVictory scrVictory;
+	ScrLevels scrLevels;
 
-	int nScreen, nLatest;
+	int nScreen, nLatest, nChosen;
 	Level arLevel[] = new Level[15];
 	Json json = new Json();
-
-	public Level getLevel(){
-		//change to number of levels once more are added
-		for (int i = 0; i < 1; i++){
-			if (arLevel[i].getPrevTime() == 0){
-				nLatest = i;
-				break;
-			}
-		}
-		return (arLevel[nLatest]);
-	}
 
 	public void updateState(int _nScreen) {
 		nScreen = _nScreen;
@@ -36,23 +26,50 @@ public class ConcreteJungle extends Game {
 		else if (nScreen == 2) {
 			setScreen(scrVictory);
 		}
+		else if (nScreen == 3) {
+			setScreen(scrLevels);
+		}
 		//Number screens here
 	}
 
 	@Override
 	public void create() {
-		nScreen = 0;
-		scrTitle = new ScrTitle(this);
-		scrPlay = new ScrPlay(this);
-		scrVictory = new ScrVictory(this);
-		//Put screens here like this too
-		updateState(nScreen);
-
 		//change to number of levels once more are added
 		for (int i = 0; i < 1; i++){
 			arLevel[i] = new Level();
 			arLevel[i] = json.fromJson(Level.class, Gdx.files.internal("Level" + (i + 1) + ".json"));
 		}
+
+		nScreen = 0;
+		scrTitle = new ScrTitle(this);
+		scrPlay = new ScrPlay(this);
+		scrVictory = new ScrVictory(this);
+		scrLevels = new ScrLevels(this);
+
+		updateState(nScreen);
+	}
+
+	public Level getLevel(int levelIndex){
+		return (arLevel[levelIndex]);
+	}
+
+	public int getLatestLevel(){
+		//change to number of levels once more are added
+		for (int i = 0; i < 1; i++){
+			if (arLevel[i].getPrevTime() == 0){
+				nLatest = i;
+				break;
+			}
+		}
+		return (nLatest);
+	}
+
+	public void setChosen(int _nChosen){
+		nChosen = _nChosen;
+	}
+
+	public int getChosen(){
+		return nChosen;
 	}
 
 	@Override

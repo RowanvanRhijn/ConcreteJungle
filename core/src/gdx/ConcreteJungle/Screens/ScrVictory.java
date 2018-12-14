@@ -35,7 +35,10 @@ public class ScrVictory implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Buttons checked
-        if(isClicked(sprNext)) concreteJungle.updateState(1);
+        if(sprNext.isClicked()) {
+            concreteJungle.setChosen(concreteJungle.getLatestLevel());
+            concreteJungle.updateState(1);
+        }
 
         batch.begin();
 
@@ -43,14 +46,6 @@ public class ScrVictory implements Screen {
         sprNext.draw(batch);
 
         batch.end();
-    }
-
-    public boolean isClicked(SprRectangle sprCheck){
-        if(Gdx.input.justTouched() && Gdx.input.getX() >= sprCheck.getX() && Gdx.input.getX() <= sprCheck.getX() + sprCheck.getWidth()
-                && Gdx.input.getY() >= sprCheck.getY() && Gdx.input.getY() <= sprCheck.getY() + sprCheck.getHeight()){
-            return true;
-        }
-        return false;
     }
 
     @Override

@@ -21,7 +21,6 @@ public class ScrPlay implements Screen, InputProcessor {
     ConcreteJungle concreteJungle;
     SpriteBatch batch;
     String strUserTx, strFinishTx;
-    //Sprite sprUser, sprFinish;
     SprUser sprUser;
     SprRectangle sprFinish;
 
@@ -57,7 +56,7 @@ public class ScrPlay implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        Level currentLevel = concreteJungle.getLevel();
+        Level currentLevel = concreteJungle.getLevel(concreteJungle.getChosen());
         batch = new SpriteBatch();
 
         nDirection = 0;
