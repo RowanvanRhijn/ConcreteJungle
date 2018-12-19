@@ -23,23 +23,21 @@ public class ScrVictory implements Screen, InputProcessor {
     @Override
     public void show() {
         batch = new SpriteBatch();
+
         txTitle = new Texture ("TitleScreen.jpg");
         txNext = new Texture ("Next.png");
+
         sprNext = new SprRectangle(txNext);
         sprNext.setPosition(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 100);
         sprNext.setSize(300, 200);
+
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void render (float delta) {
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //Buttons checked
-//        if(sprNext.isClicked()) {
-//            concreteJungle.setChosen(concreteJungle.getLatestLevel());
-//            concreteJungle.updateState(1);
-//        }
 
         batch.begin();
 
