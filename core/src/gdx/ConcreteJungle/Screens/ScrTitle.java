@@ -1,6 +1,11 @@
+//Tomorrow stuff:
+//Add input processors to all screens and a back button to scrVictory
+//That should do
+
 package gdx.ConcreteJungle.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,7 +14,7 @@ import gdx.ConcreteJungle.ConcreteJungle;
 import gdx.ConcreteJungle.SprRectangle;
 
 
-public class ScrTitle implements Screen {
+public class ScrTitle implements Screen, InputProcessor {
 	ConcreteJungle concreteJungle;
 	SpriteBatch batch;
 	Texture txTitle, txStart, txLevels;
@@ -33,18 +38,14 @@ public class ScrTitle implements Screen {
 		sprLevels.setPosition((Gdx.graphics.getWidth() / 2) - (sprStart.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (sprStart.getHeight() / 2) - 100);
 
 		concreteJungle.setChosen(concreteJungle.getLatestLevel());
+
+		Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
 	public void render (float delta) {
 		Gdx.gl.glClearColor(0, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		if (sprStart.isClicked()) concreteJungle.updateState(1);
-		if (sprLevels.isClicked()) {
-			System.out.println("Levels clicked");
-			concreteJungle.updateState(3);
-		}
 
 		batch.begin();
 
@@ -79,5 +80,47 @@ public class ScrTitle implements Screen {
 	@Override
 	public void hide() {
 
+	}
+
+	@Override
+	public boolean keyDown(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if (sprStart.isClicked(screenX, screenY)) concreteJungle.updateState(1);
+		if (sprLevels.isClicked(screenX, screenY)) concreteJungle.updateState(3);
+		return true;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
 	}
 }

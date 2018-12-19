@@ -10,10 +10,14 @@ public class SprRectangle extends Sprite{
         super(txImg);
     }
 
-    public boolean isClicked(){
+    public boolean isClicked(int screenX, int screenY){
         //Flipped the Y coordinates so that it works properly because Y is down for the mouse???
-        if(Gdx.input.justTouched() && Gdx.input.getX() >= this.getX() && Gdx.input.getX() <= this.getX() + this.getWidth()
-                && (Gdx.graphics.getHeight() - Gdx.input.getY()) >= this.getY() && (Gdx.graphics.getHeight() - Gdx.input.getY()) <= this.getY() + this.getHeight()) {
+//        if(Gdx.input.justTouched() && Gdx.input.getX() >= this.getX() && Gdx.input.getX() <= this.getX() + this.getWidth()
+//                && (Gdx.graphics.getHeight() - Gdx.input.getY()) >= this.getY() && (Gdx.graphics.getHeight() - Gdx.input.getY()) <= this.getY() + this.getHeight()) {
+//            return true;
+//        }
+        if(screenX >= this.getX() && screenX <= this.getX() + this.getWidth()
+                && (Gdx.graphics.getHeight() - screenY) >= this.getY() && (Gdx.graphics.getHeight() - screenY) <= this.getY() + this.getHeight()) {
             return true;
         }
         return false;

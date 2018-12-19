@@ -15,6 +15,7 @@ public class ScrLevels implements Screen, InputProcessor {
     SpriteBatch batch;
     Texture txTitle, txBack, txLevel;
     SprRectangle sprBack;
+    int nScroll;
 
     public ScrLevels(ConcreteJungle _ConcreteJungle) {concreteJungle = _ConcreteJungle;}
 
@@ -23,16 +24,26 @@ public class ScrLevels implements Screen, InputProcessor {
     @Override
     public void show() {
         batch = new SpriteBatch();
+        nScroll = 0;
+
         txTitle = new Texture ("TitleScreen.jpg");
         txBack = new Texture ("Back.png");
         txLevel = new Texture ("LevelIcon.png");
+
         sprBack = new SprRectangle(txBack);
         sprBack.setSize(300, 100);
-        sprBack.setPosition((Gdx.graphics.getWidth() / 2) - (sprBack.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (sprBack.getHeight() / 2));
-        arRectangle = new SprRectangle[concreteJungle.getLatestLevel()];
-        for (int i = arRectangle.length; i > 0 ; i++){
+        sprBack.setPosition((Gdx.graphics.getWidth() / 2) - (sprBack.getWidth() / 2), 0);
+
+        arRectangle = new SprRectangle[concreteJungle.getLatestLevel() + 3];
+        //Only 3 to test the scrolling for now, set to 1 once more levels are added
+        for (int i = arRectangle.length - 1; i >= 0 ; i--){
             arRectangle[i] = new SprRectangle(txLevel);
+            arRectangle[i].setSize(100, 100);
+            arRectangle[i].setPosition(Gdx.graphics.getWidth() - arRectangle[i].getWidth(),
+                    Gdx.graphics.getHeight() - ((i + 1) * ((arRectangle[i].getHeight() * 3) / 2) - (arRectangle[i].getHeight() / 2)));
         }
+
+        Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -43,10 +54,15 @@ public class ScrLevels implements Screen, InputProcessor {
         batch.begin();
 
         batch.draw(txTitle, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         sprBack.draw(batch);
-//        for (int i = arRectangle.length; i > 0 ; i++){
-//
-//        }
+
+        for (int i = arRectangle.length - 1; i >= 0 ; i--){
+            arRectangle[i].draw(batch);
+            arRectangle[i].setPosition(Gdx.graphics.getWidth() - arRectangle[i].getWidth(),
+                    Gdx.graphics.getHeight() + nScroll - ((i + 1) * ((arRectangle[i].getHeight() * 3) / 2) - (arRectangle[i].getHeight() / 2)));
+        }
+
         batch.end();
     }
 
@@ -93,9 +109,7 @@ public class ScrLevels implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("called");
-        if (sprBack.isClicked()) concreteJungle.updateState(0);
-        //does not work, isn't even getting called
+        if (sprBack.isClicked(screenX, screenY)) concreteJungle.updateState(0);
         return true;
     }
 
@@ -116,6 +130,11 @@ public class ScrLevels implements Screen, InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
-        return false;
+        if (nScroll - 3 * amount >= 0 &&
+                arRectangle[arRectangle.length - 1].getY() + (nScroll - 3 * amount) + (arRectangle[arRectangle.length - 1].getHeight())
+                        <= Gdx.graphics.getHeight()) {
+            nScroll -= 3 * amount;
+        }
+        return true;
     }
 }
