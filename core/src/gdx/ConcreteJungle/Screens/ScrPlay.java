@@ -22,7 +22,7 @@ public class ScrPlay implements Screen, InputProcessor {
     SpriteBatch batch;
     String strUserTx, strFinishTx;
     SprUser sprUser;
-    SprRectangle sprFinish;
+    SprFinish sprFinish;
 
     //Sprite movement stuff
     int nDirection;
@@ -45,6 +45,8 @@ public class ScrPlay implements Screen, InputProcessor {
     int nMapTotalWidth;
     int nMapTotalHeight;
 
+    int nW, nH;
+
     //Tiled + camera
     private OrthographicCamera orthCam;
     private TiledMap map;
@@ -59,6 +61,9 @@ public class ScrPlay implements Screen, InputProcessor {
         Level currentLevel = concreteJungle.getLevel(concreteJungle.getChosen());
         batch = new SpriteBatch();
 
+        nW = Gdx.graphics.getWidth();
+        nH = Gdx.graphics.getHeight();
+
         nDirection = 0;
         hasZoomed = false;
 
@@ -67,7 +72,7 @@ public class ScrPlay implements Screen, InputProcessor {
         sprUser = new SprUser(new Texture(strUserTx));
         sprUser.setSize(32, 32);
         sprUser.setPosition(currentLevel.getStartX(), currentLevel.getStartY());
-        sprFinish = new SprRectangle(new Texture(strFinishTx));
+        sprFinish = new SprFinish(new Texture(strFinishTx));
         sprFinish.setSize(32, 256);
         sprFinish.setPosition(currentLevel.getFinishX(), currentLevel.getFinishY());
 
@@ -86,9 +91,9 @@ public class ScrPlay implements Screen, InputProcessor {
         nMapTotalHeight = nMapHeight * nTilePixelHeight;
 
         orthCam = new OrthographicCamera(nMapTotalWidth, nMapTotalHeight);
-        orthCam.setToOrtho(false, nMapTotalWidth, Gdx.graphics.getHeight() * (nMapTotalWidth / Gdx.graphics.getWidth()));
-        if (Gdx.graphics.getHeight() * (nMapTotalWidth / Gdx.graphics.getWidth()) <  nMapTotalHeight){
-            orthCam.setToOrtho(false, Gdx.graphics.getWidth() * (nMapTotalHeight / Gdx.graphics.getHeight()), nMapTotalHeight);
+        orthCam.setToOrtho(false, nMapTotalWidth, nH * (nMapTotalWidth / nW));
+        if (nH * (nMapTotalWidth / nW) <  nMapTotalHeight){
+            orthCam.setToOrtho(false, nW * (nMapTotalHeight / nH), nMapTotalHeight);
         }
 
         orthCam.position.set(nMapTotalWidth / 2, nMapTotalHeight / 2, 0);
@@ -123,7 +128,7 @@ public class ScrPlay implements Screen, InputProcessor {
 
         //Learned some of this from https://www.baeldung.com/java-measure-elapsed-time
         if (currentTimeMillis() - lTimeStart > 5000 && hasZoomed == false){
-            orthCam.setToOrtho(false,Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() /2);
+            orthCam.setToOrtho(false,nW / 2, nH /2);
             hasZoomed = true;
             sprUser.setDirection(0);
         }

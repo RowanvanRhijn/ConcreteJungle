@@ -1,7 +1,3 @@
-//Tomorrow stuff:
-//Add input processors to all screens and a back button to scrVictory
-//That should do
-
 package gdx.ConcreteJungle.Screens;
 
 import com.badlogic.gdx.Gdx;
@@ -11,31 +7,35 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import gdx.ConcreteJungle.ConcreteJungle;
-import gdx.ConcreteJungle.SprRectangle;
-
+import gdx.ConcreteJungle.SprButton;
 
 public class ScrTitle implements Screen, InputProcessor {
 	ConcreteJungle concreteJungle;
 	SpriteBatch batch;
 	Texture txTitle, txStart, txLevels;
-	SprRectangle sprStart, sprLevels;
+	SprButton sprStart, sprLevels;
+	int nW, nH;
 
 	public ScrTitle(ConcreteJungle _ConcreteJungle) {concreteJungle = _ConcreteJungle;}
 
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
+
+		nW = Gdx.graphics.getWidth();
+		nH = Gdx.graphics.getHeight();
+
 		txTitle = new Texture ("TitleScreen.jpg");
 		txStart = new Texture ("Start.png");
 		txLevels = new Texture ("Levels.png");
 
-		sprStart = new SprRectangle(txStart);
+		sprStart = new SprButton(txStart);
 		sprStart.setSize(300, 100);
-		sprStart.setPosition((Gdx.graphics.getWidth() / 2) - (sprStart.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (sprStart.getHeight() / 2));
+		sprStart.setPosition((nW / 2) - (sprStart.getWidth() / 2), (nH / 2) - (sprStart.getHeight() / 2));
 
-		sprLevels = new SprRectangle(txLevels);
+		sprLevels = new SprButton(txLevels);
 		sprLevels.setSize(300, 100);
-		sprLevels.setPosition((Gdx.graphics.getWidth() / 2) - (sprStart.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (sprStart.getHeight() / 2) - 100);
+		sprLevels.setPosition((nW / 2) - (sprStart.getWidth() / 2), (nH / 2) - (sprStart.getHeight() / 2) - sprStart.getHeight());
 
 		concreteJungle.setChosen(concreteJungle.getLatestLevel());
 
@@ -49,7 +49,7 @@ public class ScrTitle implements Screen, InputProcessor {
 
 		batch.begin();
 
-		batch.draw(txTitle, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		batch.draw(txTitle, 0, 0, nW, nH);
 		sprStart.draw(batch);
 		sprLevels.draw(batch);
 
@@ -64,7 +64,8 @@ public class ScrTitle implements Screen, InputProcessor {
 
 	@Override
 	public void resize(int width, int height) {
-
+		nW = width;
+		nH = height;
 	}
 
 	@Override

@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import gdx.ConcreteJungle.ConcreteJungle;
-import gdx.ConcreteJungle.SprRectangle;
-
+import gdx.ConcreteJungle.SprButton;
 
 public class ScrVictory implements Screen, InputProcessor {
     ConcreteJungle concreteJungle;
     SpriteBatch batch;
-    Texture txTitle, txNext;
-    SprRectangle sprNext;
+    Texture txTitle, txNext, txBack;
+    SprButton sprNext, sprBack;
+    int nW, nH;
 
     public ScrVictory(ConcreteJungle _ConcreteJungle) {  //Referencing the main class.
         concreteJungle = _ConcreteJungle;
@@ -24,12 +24,20 @@ public class ScrVictory implements Screen, InputProcessor {
     public void show() {
         batch = new SpriteBatch();
 
+        nW = Gdx.graphics.getWidth();
+        nH = Gdx.graphics.getHeight();
+
         txTitle = new Texture ("TitleScreen.jpg");
         txNext = new Texture ("Next.png");
+        txBack = new Texture ("Back.png");
 
-        sprNext = new SprRectangle(txNext);
-        sprNext.setPosition(Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 - 100);
+        sprNext = new SprButton(txNext);
+        sprNext.setPosition(nW / 2 - 150, nH / 2 - 100);
         sprNext.setSize(300, 200);
+
+        sprBack = new SprButton(txBack);
+        sprBack.setSize(300, 100);
+        sprBack.setPosition((nW / 2) - (sprBack.getWidth() / 2), 0);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -41,8 +49,9 @@ public class ScrVictory implements Screen, InputProcessor {
 
         batch.begin();
 
-        batch.draw(txTitle, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(txTitle, 0, 0, nW, nH);
         sprNext.draw(batch);
+        sprBack.draw(batch);
 
         batch.end();
     }
@@ -93,6 +102,7 @@ public class ScrVictory implements Screen, InputProcessor {
             concreteJungle.setChosen(concreteJungle.getLatestLevel());
             concreteJungle.updateState(1);
         }
+        if (sprBack.isClicked(screenX, screenY)) concreteJungle.updateState(0);
         return true;
     }
 
