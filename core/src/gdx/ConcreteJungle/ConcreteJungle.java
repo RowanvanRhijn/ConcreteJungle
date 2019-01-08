@@ -35,7 +35,7 @@ public class ConcreteJungle extends Game {
 	@Override
 	public void create() {
 		//change to number of levels once more are added
-		for (int i = 0; i < 1; i++){
+		for (int i = 0; i < 2; i++){
 			arLevel[i] = new Level();
 			arLevel[i] = json.fromJson(Level.class, Gdx.files.internal("Level" + (i + 1) + ".json"));
 		}
@@ -55,7 +55,7 @@ public class ConcreteJungle extends Game {
 
 	public int getLatestLevel(){
 		//change to number of levels once more are added
-		for (int i = 0; i < 1; i++){
+		for (int i = 0; i < 2; i++){
 			if (arLevel[i].getPrevTime() == 0){
 				nLatest = i;
 				break;

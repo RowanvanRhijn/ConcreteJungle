@@ -37,7 +37,7 @@ public class ScrLevels implements Screen, InputProcessor {
         sprBack.setSize(300, 100);
         sprBack.setPosition((nW / 2) - (sprBack.getWidth() / 2), 0);
 
-        arButton = new SprButton[concreteJungle.getLatestLevel() + 2];
+        arButton = new SprButton[concreteJungle.getLatestLevel() + 1];
         //Only 3 to test the scrolling for now, set to 1 once more levels are added
         for (int i = arButton.length - 1; i >= 0 ; i--){
             arButton[i] = new SprButton(txLevel);
@@ -51,7 +51,7 @@ public class ScrLevels implements Screen, InputProcessor {
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(0, 0, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
@@ -113,6 +113,12 @@ public class ScrLevels implements Screen, InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (sprBack.isClicked(screenX, screenY)) concreteJungle.updateState(0);
+        for (int i = arButton.length - 1; i >= 0 ; i--){
+            if(arButton[i].isClicked(screenX, screenY)) {
+                concreteJungle.setChosen(i);
+                concreteJungle.updateState(1);
+            }
+        }
         return true;
     }
 

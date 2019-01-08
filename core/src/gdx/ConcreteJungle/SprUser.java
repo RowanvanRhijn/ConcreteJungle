@@ -49,7 +49,7 @@ public class SprUser extends Sprite {
 
     public boolean isBuildingHit(TiledMap map){
         //Stolen from https://stackoverflow.com/questions/20063281/libgdx-collision-detection-with-tiledmap
-        nObjectLayerId = 2;
+        nObjectLayerId = 1;
         //Was TiledMapTileLayer and trying to cast a MapLayer to it, can't do that but works just as MapLayers
         mapCollisionObjectLayer = map.getLayers().get(nObjectLayerId);
         mapObjects = mapCollisionObjectLayer.getObjects();
