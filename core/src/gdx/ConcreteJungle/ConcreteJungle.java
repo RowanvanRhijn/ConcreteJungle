@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.Json;
 import gdx.ConcreteJungle.Screens.*;
 import com.badlogic.gdx.Gdx;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class ConcreteJungle extends Game {
 	ScrTitle scrTitle;
 	ScrPlay scrPlay;
@@ -70,6 +73,26 @@ public class ConcreteJungle extends Game {
 
 	public int getChosen(){
 		return nChosen;
+	}
+
+	public void writeScore(long lTime, int nLevel){
+//		int nPrevTime= (int) lTime;
+//		//json.writeField(nPrevTime, "nPrevTime", "Level1.json");
+//		json.writeValue(nPrevTime);
+//
+//		try(FileWriter file = new FileWriter("Level" + nLevel + ".json");){
+//
+//		}
+//		catch(IOException e){
+//			e.printStackTrace();
+//		}
+//
+////		try {
+////			json.getWriter().set("nPrevTime", nPrevTime);
+////		} catch (IOException e) {
+////			e.printStackTrace();
+////		}
+//		System.out.println(nPrevTime);
 	}
 
 	@Override

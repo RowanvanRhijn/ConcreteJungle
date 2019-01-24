@@ -4,6 +4,7 @@
   "nStartY" : 1456,
   "nFinishX" : -30,
   "nFinishY" : 1088,
+  "nAllottedTime" : 120000,
   "nPrevTime" : 0,
   "nEnemies" : 0
 }

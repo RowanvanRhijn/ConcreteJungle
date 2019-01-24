@@ -5,9 +5,13 @@ public class Level {
     String mapFile;
 
     int nStartX, nStartY, nFinishX, nFinishY;
-    int nPrevTime, nEnemies;
+    int nAllottedTime, nPrevTime, nEnemies;
     int arnEnemyX[] = new int [nEnemies];
     int arnEnemyY[] = new int [nEnemies];
+
+    public int getAllottedTime(){
+        return nAllottedTime;
+    }
 
     public int getPrevTime(){
         return nPrevTime;

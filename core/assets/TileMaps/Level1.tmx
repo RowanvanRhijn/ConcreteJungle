@@ -33,7 +33,7 @@
 1061,1062,1063,1064,1064,1061,1062,1063,1064,1061,1062,1063,1064,1061,1062,1063,1064,1078,1079,1080,1077,1077,1078,1079,1080,70,1077,1078,1079,1080
 </data>
  </layer>
- <objectgroup name="Buildings_Collision" locked="1">
+ <objectgroup name="Buildings_Collision" visible="0" locked="1">
   <object id="56" x="1153.33" y="1537.33" width="766.667" height="126.667"/>
   <object id="59" x="1537.33" y="1025.33" width="126.667" height="509.333"/>
   <object id="63" x="1792" y="1.33333" width="128" height="1406.67"/>

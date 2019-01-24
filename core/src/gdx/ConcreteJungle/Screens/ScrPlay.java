@@ -47,6 +47,8 @@ public class ScrPlay implements Screen, InputProcessor {
 
     int nW, nH;
 
+    Level currentLevel;
+
     //Tiled + camera
     private OrthographicCamera orthCam;
     private TiledMap map;
@@ -58,7 +60,7 @@ public class ScrPlay implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        Level currentLevel = concreteJungle.getLevel(concreteJungle.getChosen());
+        currentLevel = concreteJungle.getLevel(concreteJungle.getChosen());
         batch = new SpriteBatch();
 
         nW = Gdx.graphics.getWidth();
@@ -100,7 +102,7 @@ public class ScrPlay implements Screen, InputProcessor {
         orthCam.update();
 
         lTimeStart = currentTimeMillis();
-        lTimeLimit = 65000;
+        lTimeLimit = currentLevel.getAllottedTime() + 5000;
 
         nDX[0] = 0;
         nDX[1] = -3;
@@ -157,6 +159,9 @@ public class ScrPlay implements Screen, InputProcessor {
             if(hasZoomed) sprUser.moveUser(1);
             if (sprUser.isBuildingHit(map)) sprUser.moveUser(-1);
             if (currentTimeMillis() - lTimeStart > lTimeLimit || sprUser.isFinished(sprFinish)){
+                if (lTimeLimit - (currentTimeMillis() - lTimeStart) + 5000 > currentLevel.getPrevTime()){
+//                    concreteJungle.writeScore(lTimeLimit - (currentTimeMillis() - lTimeStart) + 5000);
+                }
                 concreteJungle.updateState(2);
             }
 
